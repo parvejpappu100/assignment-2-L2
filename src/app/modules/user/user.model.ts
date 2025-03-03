@@ -59,7 +59,7 @@ const userOrdersSchema = new Schema<TUserOrders>([
 ]);
 
 const userSchema = new Schema<TUser, UserModel>({
-    userId: {
+  userId: {
     type: Number,
     required: [true, 'User ID is required.'],
     unique: true,
@@ -71,12 +71,14 @@ const userSchema = new Schema<TUser, UserModel>({
   age: { type: Number, required: [true, 'Age is required'] },
   email: { type: String, unique: true, required: [true, 'Email is required'] },
   isActive: { type: Boolean, required: true },
-  hobbies: { type: [String], default: [] },
+  hobbies: {
+    type: [String],
+    required: [true, 'At least one hobby is required'],
+  },
   address: userAddressSchema,
-  orders: userOrdersSchema,
+  // orders: userOrdersSchema,
+  orders: { type: [userOrdersSchema], required: false } ,
 });
 
-
 // * Create a Model:
-export const User = model<TUser, UserModel>("User" , userSchema);
-
+export const User = model<TUser, UserModel>('User', userSchema);

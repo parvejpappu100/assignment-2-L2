@@ -12,25 +12,23 @@ export type TUserAddress = {
   country: string;
 };
 
-export type TUserOrders = [
-  {
-    productName: string;
-    price: number;
-    quantity: number;
-  },
-];
+export type TUserOrders = Array<{
+  productName: string;
+  price: number;
+  quantity: number;
+}>;
 
 export type TUser = {
-  userId: { type: number; };
-  username: { type: string;};
+  userId: number;
+  username: string;
   password: string;
   fullName: TUserName;
   age: number;
   email: string;
   isActive: boolean;
-  hobbies: { type: [string] , default: [] };
+  hobbies: string[];
   address: TUserAddress;
-  orders: TUserOrders;
+  orders?: TUserOrders ;
 };
 
 export interface UserModel extends Model<TUser> {
