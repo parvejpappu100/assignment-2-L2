@@ -45,7 +45,26 @@ const getAllUsers = async (req: Request, res: Response) => {
   }
 };
 
+// to get single user data from db:
+const getSingleUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userID;
+
+    const result = await UserServices.getSingleUserDataFromDB(userId);
+
+    // send response;
+    res.status(200).json({
+      success: true,
+      message: 'Get single user successfully',
+      data: result,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export const UserControllers = {
   createUser,
-  getAllUsers
+  getAllUsers,
+  getSingleUser,
 };

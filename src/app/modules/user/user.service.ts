@@ -13,7 +13,14 @@ const getAllUsersDataFromDB = async () => {
   return result;
 };
 
+// to get single user data from db:
+const getSingleUserDataFromDB = async (id: string) => {
+  const result = await User.findOne({ id });
+  return result;
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUsersDataFromDB,
+  getSingleUserDataFromDB
 };
