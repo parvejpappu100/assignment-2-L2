@@ -21,14 +21,14 @@ export type TUserOrders = [
 ];
 
 export type TUser = {
-  id: { type: number; required: true; unique: true };
-  username: { type: string; required: true; unique: true };
+  userId: { type: number; };
+  username: { type: string;};
   password: string;
   fullName: TUserName;
   age: number;
   email: string;
   isActive: boolean;
-  hobbies: { type: [string] };
+  hobbies: { type: [string] , default: [] };
   address: TUserAddress;
   orders: TUserOrders;
 };
