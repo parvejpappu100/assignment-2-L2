@@ -6,6 +6,8 @@ import {
   TUser,
   UserModel,
 } from './user.interface';
+import bcrypt from 'bcrypt';
+import config from '../../config';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -80,6 +82,22 @@ const userSchema = new Schema<TUser, UserModel>({
   orders: { type: [userOrdersSchema], required: false },
 });
 
+// pre save middleware / hook
+userSchema.pre('save', async function (next) {
+  // hashing password and save into db
+  this.password = await bcrypt.hash(
+    this.password,
+    Number(config.bcrypt_salt_rounds),
+  );
+  next();
+});
+
+// post save middleware / hook:
+userSchema.post('save', function (doc, next) {
+  doc.password = '';
+  next();
+});
+
 // * Creating a custom static method:
 userSchema.statics.isUserExists = async function (userId: number) {
   const existingUser = await User.findOne({ userId });
@@ -88,6 +106,5 @@ userSchema.statics.isUserExists = async function (userId: number) {
 
 // * Create a Model:
 const User = model<TUser, UserModel>('User', userSchema);
-
 
 export default User;
