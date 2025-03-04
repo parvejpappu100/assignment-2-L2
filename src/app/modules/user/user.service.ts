@@ -22,6 +22,11 @@ const getSingleUserDataFromDB = async (userId: number) => {
   const result = await User.findOne({ userId });
   return result;
 };
+// to Retrieve all orders for a specific user
+const getSingleUserOrdersDataFromDB = async (userId: number) => {
+  const result = await User.findOne({ userId });
+  return result;
+};
 // to delete single user data from db:
 const deleteSingleUserDataFromDB = async (userId: number) => {
   const result = await User.updateOne({ userId }, { isDeleted: true });
@@ -62,4 +67,5 @@ export const UserServices = {
   deleteSingleUserDataFromDB,
   updateSingleUserDataIntoDB,
   addProductToUserOrder,
+  getSingleUserOrdersDataFromDB,
 };

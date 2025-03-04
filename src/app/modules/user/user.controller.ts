@@ -51,7 +51,6 @@ const getSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const result = await UserServices.getSingleUserDataFromDB(parseInt(userId));
-    console.log(result)
 
     if(!result){
       res.status(404).json({
@@ -79,6 +78,39 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+
+// to get single user orders data from db:
+const getSingleUserOrdersData = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const result = await UserServices.getSingleUserOrdersDataFromDB(parseInt(userId));
+
+    if(!result){
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found"
+        }
+      })
+    }
+    // send response;
+    res.status(200).json({
+      success: true,
+      message: 'Order fetched successfully!',
+      data: {orders: result?.orders},
+    });
+  } catch (error: any) {
+    // send response;
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
+  }
+};
+
 // to get single user data from db:
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
@@ -91,7 +123,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'User deleted successfully',
-      data: null,
+      data: result.upsertedId,
     });
   } catch (error: any) {
     // send response;
@@ -149,7 +181,7 @@ const addOderDataToUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
-      data: null,
+      data: result && null,
     });
 
   } catch (error: any) {
@@ -161,6 +193,7 @@ const addOderDataToUser = async (req: Request, res: Response) => {
   }
 };
 
+
 export const UserControllers = {
   createUser,
   getAllUsers,
@@ -168,4 +201,5 @@ export const UserControllers = {
   deleteSingleUser,
   updateSingleUser,
   addOderDataToUser,
+  getSingleUserOrdersData,
 };
