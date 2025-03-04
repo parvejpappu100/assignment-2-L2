@@ -27,6 +27,13 @@ const getSingleUserOrdersDataFromDB = async (userId: number) => {
   const result = await User.findOne({ userId });
   return result;
 };
+
+// Calculate Total Price of Orders for a Specific User
+const getSingleUserOrdersPriceDataFromDB = async (userId: number) => {
+  const result = await User.findOne({ userId });
+  return result?.orders;
+};
+
 // to delete single user data from db:
 const deleteSingleUserDataFromDB = async (userId: number) => {
   const result = await User.updateOne({ userId }, { isDeleted: true });
@@ -68,4 +75,5 @@ export const UserServices = {
   updateSingleUserDataIntoDB,
   addProductToUserOrder,
   getSingleUserOrdersDataFromDB,
+  getSingleUserOrdersPriceDataFromDB,
 };
