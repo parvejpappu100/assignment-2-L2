@@ -17,7 +17,7 @@ const createUser = async (req: Request, res: Response) => {
     // * send response:
     res.status(200).json({
       success: true,
-      message: 'User is created successfully.',
+      message: 'User created successfully.',
       data: result,
     });
   } catch (error: any) {
@@ -38,7 +38,7 @@ const getAllUsers = async (req: Request, res: Response) => {
     // send response;
     res.status(200).json({
       success: true,
-      message: 'Users are retrieve successfully.',
+      message: 'Users fetched successfully!',
       data: result,
     });
   } catch (error) {
@@ -51,7 +51,18 @@ const getSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
     const result = await UserServices.getSingleUserDataFromDB(parseInt(userId));
+    console.log(result)
 
+    if(!result){
+      res.status(404).json({
+        success: false,
+        message: "User not found",
+        error: {
+          code: 404,
+          description: "User not found"
+        }
+      })
+    }
     // send response;
     res.status(200).json({
       success: true,
@@ -80,7 +91,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'User deleted successfully',
-      data: result,
+      data: null,
     });
   } catch (error: any) {
     // send response;
@@ -107,7 +118,7 @@ const updateSingleUser = async (req: Request, res: Response) => {
 
     res.status(200).json({
       success: true,
-      message: 'User replaced successfully',
+      message: 'User updated successfully',
       data: result,
     });
   } catch (error: any) {
@@ -138,7 +149,7 @@ const addOderDataToUser = async (req: Request, res: Response) => {
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
-      data: result,
+      data: null,
     });
 
   } catch (error: any) {
