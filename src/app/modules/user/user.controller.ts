@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
 import userZodValidationSchema from './user.validation';
+import { z } from 'zod';
 
 // to create user in db:
 const createUser = async (req: Request, res: Response) => {
@@ -8,7 +9,7 @@ const createUser = async (req: Request, res: Response) => {
     const { user: userData } = req.body;
 
     // * user data validation using zod:
-    const zodParsedData = userZodValidationSchema.parse(userData)
+    const zodParsedData = userZodValidationSchema.parse(userData);
 
     // * will call service function to send this data:
     const result = await UserServices.createUserIntoDB(zodParsedData);
@@ -57,7 +58,7 @@ const getSingleUser = async (req: Request, res: Response) => {
       message: 'Get single user successfully',
       data: result,
     });
-  } catch (error : any) {
+  } catch (error: any) {
     // send response;
     res.status(500).json({
       success: false,
@@ -67,12 +68,13 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-
 // to get single user data from db:
 const deleteSingleUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    const result = await UserServices.deleteSingleUserDataFromDB(parseInt(userId));
+    const result = await UserServices.deleteSingleUserDataFromDB(
+      parseInt(userId),
+    );
 
     // send response;
     res.status(200).json({
@@ -80,7 +82,7 @@ const deleteSingleUser = async (req: Request, res: Response) => {
       message: 'User deleted successfully',
       data: result,
     });
-  } catch (error : any) {
+  } catch (error: any) {
     // send response;
     res.status(500).json({
       success: false,
@@ -98,7 +100,10 @@ const updateSingleUser = async (req: Request, res: Response) => {
     // * Validate the complete user object using Zod
     const zodParsedData = userZodValidationSchema.parse(updateData);
 
-    const result = await UserServices.updateSingleUserDataIntoDB(userId, zodParsedData);
+    const result = await UserServices.updateSingleUserDataIntoDB(
+      userId,
+      zodParsedData,
+    );
 
     res.status(200).json({
       success: true,
@@ -114,10 +119,42 @@ const updateSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const addOderDataToUser = async (req: Request, res: Response) => {
+  try {
+
+    const userId = parseInt(req.params.userId);
+    const orderData = req.body;
+
+    const orderValidationSchema = z.object({
+      productName: z.string().min(1, 'Product name is required').trim(),
+      price: z.number().min(0, 'Price must be a positive number'),
+      quantity: z.number().min(1, 'Quantity must be at least 1'),
+    });
+
+    const validatedOderData = orderValidationSchema.parse(orderData);
+
+    const result = await UserServices.addProductToUserOrder(userId, validatedOderData);
+
+    res.status(200).json({
+      success: true,
+      message: 'Order created successfully!',
+      data: result,
+    });
+
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   deleteSingleUser,
   updateSingleUser,
+  addOderDataToUser,
 };

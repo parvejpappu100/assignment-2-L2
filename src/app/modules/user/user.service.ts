@@ -34,9 +34,24 @@ const updateSingleUserDataIntoDB = async (userId: number, updateData: TUser) => 
     throw new Error('User not found');
   }
 
-  // Replace the entire user document (except userId)
   const result = await User.findOneAndUpdate({ userId }, updateData, { new: true, overwrite: true });
   return result;
+};
+
+const addProductToUserOrder = async (userId: number, orderData: { productName: string; price: number; quantity: number }) => {
+  const existingUser = await User.isUserExists(userId);
+  if (!existingUser) {
+    throw new Error('User not found');
+  }
+
+  
+  const updatedUser = await User.findOneAndUpdate(
+    { userId },
+    { $push: { orders: orderData } }, 
+    { new: true }
+  );
+
+  return updatedUser;
 };
 
 
@@ -46,4 +61,5 @@ export const UserServices = {
   getSingleUserDataFromDB,
   deleteSingleUserDataFromDB,
   updateSingleUserDataIntoDB,
+  addProductToUserOrder,
 };
