@@ -102,6 +102,19 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
+
+userSchema.pre('findOneAndUpdate', async function (next) {
+  const update = this.getUpdate() as { password?: string };
+
+  if (update.password) {
+    update.password = await bcrypt.hash(
+      update.password,
+      Number(config.bcrypt_salt_rounds),
+    );
+  }
+  next();
+});
+
 // Query middleware
 userSchema.pre('find', function (next) {
   this.find({ isDeleted: { $ne: true } });
