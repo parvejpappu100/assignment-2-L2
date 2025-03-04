@@ -58,14 +58,14 @@ npm run start:prod
 
 | Method | Endpoint | Description |
 |--------|-----------------------------|--------------------------------|
-| **POST** | `/users/create-user` | Create a new user |
-| **GET** | `/users/` | Get all users |
-| **GET** | `/users/:userId` | Get a single user by ID |
-| **DELETE** | `/users/:userId` | Delete a user by ID |
-| **PUT** | `/users/:userId` | Update a user by ID |
-| **PUT** | `/users/:userId/create-order` | Add an order to a user |
-| **GET** | `/users/:userId/orders` | Get a user's orders |
-| **GET** | `/users/:userId/orders/total-price` | Get total order price for a user |
+| **POST** | `api/users/create-user` | Create a new user |
+| **GET** | `api/users/` | Get all users |
+| **GET** | `api/users/:userId` | Get a single user by ID |
+| **DELETE** | `api/users/:userId` | Delete a user by ID |
+| **PUT** | `api/users/:userId` | Update a user by ID |
+| **PUT** | `api/users/:userId/create-order` | Add an order to a user |
+| **GET** | `api/users/:userId/orders` | Get a user's orders |
+| **GET** | `api/users/:userId/orders/total-price` | Get total order price for a user |
 
 ## **Project Structure**
 ```

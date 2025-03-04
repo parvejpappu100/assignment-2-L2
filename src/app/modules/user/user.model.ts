@@ -102,7 +102,6 @@ userSchema.post('save', function (doc, next) {
   next();
 });
 
-
 userSchema.pre('findOneAndUpdate', async function (next) {
   const update = this.getUpdate() as { password?: string };
 

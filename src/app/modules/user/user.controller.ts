@@ -52,15 +52,15 @@ const getSingleUser = async (req: Request, res: Response) => {
     const userId = req.params.userId;
     const result = await UserServices.getSingleUserDataFromDB(parseInt(userId));
 
-    if(!result){
+    if (!result) {
       res.status(404).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
         error: {
           code: 404,
-          description: "User not found"
-        }
-      })
+          description: 'User not found',
+        },
+      });
     }
     // send response;
     res.status(200).json({
@@ -78,28 +78,29 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-
 // to get single user orders data from db:
 const getSingleUserOrdersData = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    const result = await UserServices.getSingleUserOrdersDataFromDB(parseInt(userId));
+    const result = await UserServices.getSingleUserOrdersDataFromDB(
+      parseInt(userId),
+    );
 
-    if(!result){
+    if (!result) {
       res.status(404).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
         error: {
           code: 404,
-          description: "User not found"
-        }
-      })
+          description: 'User not found',
+        },
+      });
     }
     // send response;
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
-      data: {orders: result?.orders},
+      data: { orders: result?.orders },
     });
   } catch (error: any) {
     // send response;
@@ -114,25 +115,31 @@ const getSingleUserOrdersData = async (req: Request, res: Response) => {
 const getSingleUserOrdersPriceData = async (req: Request, res: Response) => {
   try {
     const userId = req.params.userId;
-    const result = await UserServices.getSingleUserOrdersPriceDataFromDB(parseInt(userId));
+    const result = await UserServices.getSingleUserOrdersPriceDataFromDB(
+      parseInt(userId),
+    );
 
-    if(!result){
+    if (!result) {
       res.status(404).json({
         success: false,
-        message: "User not found",
+        message: 'User not found',
         error: {
           code: 404,
-          description: "User not found"
-        }
-      })
+          description: 'User not found',
+        },
+      });
     }
-
 
     // send response;
     res.status(200).json({
       success: true,
       message: 'Order fetched successfully!',
-      data: {totalPrice: result?.reduce((sum, order) => sum + order.price * order.quantity, 0)}
+      data: {
+        totalPrice: result?.reduce(
+          (sum, order) => sum + order.price * order.quantity,
+          0,
+        ),
+      },
     });
   } catch (error: any) {
     // send response;
@@ -195,9 +202,8 @@ const updateSingleUser = async (req: Request, res: Response) => {
   }
 };
 
-const addOderDataToUser = async (req: Request, res: Response) => {
+const addOrdersDataToUser = async (req: Request, res: Response) => {
   try {
-
     const userId = parseInt(req.params.userId);
     const orderData = req.body;
 
@@ -209,14 +215,16 @@ const addOderDataToUser = async (req: Request, res: Response) => {
 
     const validatedOderData = orderValidationSchema.parse(orderData);
 
-    const result = await UserServices.addProductToUserOrder(userId, validatedOderData);
+    const result = await UserServices.addProductToUserOrder(
+      userId,
+      validatedOderData,
+    );
 
     res.status(200).json({
       success: true,
       message: 'Order created successfully!',
       data: result && null,
     });
-
   } catch (error: any) {
     res.status(500).json({
       success: false,
@@ -226,14 +234,13 @@ const addOderDataToUser = async (req: Request, res: Response) => {
   }
 };
 
-
 export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
   deleteSingleUser,
   updateSingleUser,
-  addOderDataToUser,
+  addOderDataToUser: addOrdersDataToUser,
   getSingleUserOrdersData,
   getSingleUserOrdersPriceData,
 };
