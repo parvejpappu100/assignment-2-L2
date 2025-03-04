@@ -90,9 +90,34 @@ const deleteSingleUser = async (req: Request, res: Response) => {
   }
 };
 
+const updateSingleUser = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+    const updateData = req.body;
+
+    // * Validate the complete user object using Zod
+    const zodParsedData = userZodValidationSchema.parse(updateData);
+
+    const result = await UserServices.updateSingleUserDataIntoDB(userId, zodParsedData);
+
+    res.status(200).json({
+      success: true,
+      message: 'User replaced successfully',
+      data: result,
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
+  }
+};
+
 export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
-  deleteSingleUser
+  deleteSingleUser,
+  updateSingleUser,
 };
