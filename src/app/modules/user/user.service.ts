@@ -18,8 +18,13 @@ const getAllUsersDataFromDB = async () => {
 };
 
 // to get single user data from db:
-const getSingleUserDataFromDB = async (id: string) => {
-  const result = await User.findOne({ id });
+const getSingleUserDataFromDB = async (userId: number) => {
+  const result = await User.findOne({ userId });
+  return result;
+};
+// to delete single user data from db:
+const deleteSingleUserDataFromDB = async (userId: number) => {
+  const result = await User.updateOne({ userId } , {isDeleted: true});
   return result;
 };
 
@@ -27,4 +32,5 @@ export const UserServices = {
   createUserIntoDB,
   getAllUsersDataFromDB,
   getSingleUserDataFromDB,
+  deleteSingleUserDataFromDB,
 };

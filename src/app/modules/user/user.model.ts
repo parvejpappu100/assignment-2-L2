@@ -80,6 +80,10 @@ const userSchema = new Schema<TUser, UserModel>({
   address: userAddressSchema,
   // orders: userOrdersSchema,
   orders: { type: [userOrdersSchema], required: false },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // pre save middleware / hook
@@ -95,6 +99,22 @@ userSchema.pre('save', async function (next) {
 // post save middleware / hook:
 userSchema.post('save', function (doc, next) {
   doc.password = '';
+  next();
+});
+
+// Query middleware
+userSchema.pre('find', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+userSchema.pre('findOne', function (next) {
+  this.find({ isDeleted: { $ne: true } });
+  next();
+});
+
+userSchema.pre('aggregate', function (next) {
+  this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
   next();
 });
 

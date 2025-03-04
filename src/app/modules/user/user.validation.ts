@@ -16,7 +16,7 @@ const userOrdersValidationSchema = z.array(
     productName: z.string().min(1, 'Product name is required').trim(),
     price: z.number().min(0, 'Price must be a positive number'),
     quantity: z.number().min(1, 'Quantity must be at least 1'),
-  })
+  }),
 );
 
 export const userZodValidationSchema = z.object({
@@ -30,7 +30,7 @@ export const userZodValidationSchema = z.object({
   hobbies: z.array(z.string()).min(1, 'At least one hobby is required'),
   address: userAddressValidationSchema,
   orders: userOrdersValidationSchema.optional(),
+  isDeleted: z.boolean(),
 });
-
 
 export default userZodValidationSchema;

@@ -48,9 +48,8 @@ const getAllUsers = async (req: Request, res: Response) => {
 // to get single user data from db:
 const getSingleUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.userID;
-
-    const result = await UserServices.getSingleUserDataFromDB(userId);
+    const userId = req.params.userId;
+    const result = await UserServices.getSingleUserDataFromDB(parseInt(userId));
 
     // send response;
     res.status(200).json({
@@ -58,8 +57,36 @@ const getSingleUser = async (req: Request, res: Response) => {
       message: 'Get single user successfully',
       data: result,
     });
-  } catch (error) {
-    console.log(error);
+  } catch (error : any) {
+    // send response;
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
+  }
+};
+
+
+// to get single user data from db:
+const deleteSingleUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.userId;
+    const result = await UserServices.deleteSingleUserDataFromDB(parseInt(userId));
+
+    // send response;
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully',
+      data: result,
+    });
+  } catch (error : any) {
+    // send response;
+    res.status(500).json({
+      success: false,
+      message: error.message || 'Something went wrong!',
+      error: error,
+    });
   }
 };
 
@@ -67,4 +94,5 @@ export const UserControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
+  deleteSingleUser
 };
