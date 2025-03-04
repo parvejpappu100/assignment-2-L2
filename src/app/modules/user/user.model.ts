@@ -77,8 +77,17 @@ const userSchema = new Schema<TUser, UserModel>({
   },
   address: userAddressSchema,
   // orders: userOrdersSchema,
-  orders: { type: [userOrdersSchema], required: false } ,
+  orders: { type: [userOrdersSchema], required: false },
 });
 
+// * Creating a custom static method:
+userSchema.statics.isUserExists = async function (userId: number) {
+  const existingUser = await User.findOne({ userId });
+  return existingUser;
+};
+
 // * Create a Model:
-export const User = model<TUser, UserModel>('User', userSchema);
+const User = model<TUser, UserModel>('User', userSchema);
+
+
+export default User;
